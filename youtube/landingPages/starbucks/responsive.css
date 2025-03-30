@@ -1,0 +1,85 @@
+@media (max-width: 991px) {
+    header {
+        padding: 20px;
+    }
+    header .logo {
+        max-width: 60px;
+    }
+    header ul {
+        display: none;
+    }
+    .toggle {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        background: url(./src/assets/images/menu.png);
+        background-position: center;
+        background-size: 30px;
+        background-repeat: no-repeat;
+        filter: invert(1);
+        z-index: 11;
+    }
+    .toggle.active {
+        position: fixed;
+        background: url(./src/assets/images/close.png);
+        background-position: center;
+        background-size: 25px;
+        background-repeat: no-repeat;
+        filter: invert(1);
+    }
+    header ul.navigation.active {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background: #fff;
+        z-index: 10;
+    }
+    header ul li a {
+        font-size: 1.5em; /* Pesquisar melhor sobre em*/
+        margin: 5px 0;
+    }
+    header ul li a:hover {
+        color: #299c6c; 
+    }
+    section{
+        padding: 20px 20px 120px;
+    }
+    .content {
+        flex-direction: column;
+        margin-top: 100px;
+    }
+    .content .textBox h2 {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+    .content .textBox {
+        max-width: 100%;
+    }
+    .content .imgBox {
+        max-width: 100%;
+        justify-content: center;
+    }
+    .content .imgBox img {
+        max-width: 300px;
+    }
+    .thumb li img {
+        max-width: 40px;
+    }
+    .circle{
+        clip-path: circle(400px at center bottom);
+    }
+    .sci{
+        background: #017143;
+        right: 0;
+        width: 50px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+}
