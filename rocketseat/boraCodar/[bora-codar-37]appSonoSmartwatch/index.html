@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SonoWatch</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="./script.js" type="module"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <img id="watch" src="./assets/Watch.png" alt="Relógio Apple Watch" />
+
+    <div class="container">
+      <header>
+        <span>SonoWatch</span>
+        <span class="hour">11:00</span>
+      </header>
+
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-pagination"></div>
+          <div class="swiper-slide">
+            <section class="top">
+              <img class="icon" src="./assets/Cama.svg" alt="" />
+
+              <img class="button" src="./assets/Button.svg" alt="" />
+            </section>
+
+            <section class="text">
+              <span class="title">Descanso Noturno</span>
+              <span>SONO REM - 12/09</span>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
