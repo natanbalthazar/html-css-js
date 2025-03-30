@@ -28,7 +28,7 @@ img {
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
-  left: 49%;
+  left: 49.5%;
 }
 
 header {
@@ -43,20 +43,24 @@ header {
 }
 
 header span:first-child {
-  color: var(--amthyst, #cda5f8);
+  color: var(--amethyst, #cda5f8);
+  font-family: Inter;
   font-size: 17px;
   font-style: normal;
   font-weight: 700;
   line-height: 30px;
+  /* 176.471% */
 }
 
 .hour {
   color: var(--opal, #fff);
   text-align: right;
+  font-family: Inter;
   font-size: 17px;
   font-style: normal;
   font-weight: 500;
   line-height: 19.5px;
+  /* 114.706% */
 }
 
 .swiper {
@@ -68,7 +72,7 @@ header span:first-child {
 
 .swiper-slide {
   background-color: #202020;
-  border-radius: 20px;
+  border-radius: 30px;
   opacity: 0.6;
   transition: opacity 0.3s;
 }
@@ -104,8 +108,10 @@ header span:first-child {
 
 .title {
   color: var(--opal, #fff);
+  font-family: Inter;
   font-size: 17px;
   font-style: normal;
   font-weight: 600;
   line-height: 19.5px;
+  /* 114.706% */
 }

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SonoWatch</title>
-    <link rel="stylesheet" href="style.css" />
+
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
     />
 
+    <link rel="stylesheet" href="./style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,14 +18,13 @@
       rel="stylesheet"
     />
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
     <script src="./script.js" type="module"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
-      defer
-    ></script>
   </head>
+
   <body>
-    <img id="watch" src="./assets/Watch.png" alt="Relógio Apple Watch" />
+    <img src="./assets/Watch.png" alt="" id="watch" />
 
     <div class="container">
       <header>
@@ -37,13 +37,26 @@
           <div class="swiper-pagination"></div>
           <div class="swiper-slide">
             <section class="top">
-              <img class="icon" src="./assets/Cama.svg" alt="" />
+              <img src="./assets/Cama.svg" alt="" class="icon" />
 
-              <img class="button" src="./assets/Button.svg" alt="" />
+              <img src="./assets/Button.svg" alt="" class="button" />
             </section>
 
             <section class="text">
-              <span class="title">Descanso Noturno</span>
+              <span class="title">Descanso noturno</span>
+              <span>SONO REM - 12/09</span>
+            </section>
+          </div>
+
+          <div class="swiper-slide">
+            <section class="top">
+              <img src="./assets/Rede.svg" alt="" class="icon" />
+
+              <img src="./assets/Button.svg" alt="" class="button" />
+            </section>
+
+            <section class="text">
+              <span class="title">Soneca à tarde</span>
               <span>SONO REM - 12/09</span>
             </section>
           </div>
