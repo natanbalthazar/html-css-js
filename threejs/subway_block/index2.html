@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subway Surfers Clone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let scene,
+        camera,
+        renderer,
+        player,
+        obstacles = [],
+        speed = 0.2;
+      let moveLeft = false,
+        moveRight = false,
+        isJumping = false,
+        velocityY = 0;
+
+      function init() {
+        scene = new THREE.Scene();
+
+        // Fundo gradiente
+        let bgTexture = new THREE.CanvasTexture(generateGradient());
+        scene.background = bgTexture;
+
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        camera.position.set(0, 5, 5);
+        camera.lookAt(0, 0, 0);
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let geometry = new THREE.BoxGeometry(1, 1, 1);
+        let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        player = new THREE.Mesh(geometry, material);
+        player.position.y = 0.5;
+        scene.add(player);
+
+        animate();
+        setInterval(generateObstacle, 1500);
+        document.addEventListener("keydown", onKeyDown);
+        document.addEventListener("keyup", onKeyUp);
+      }
+
+      function generateGradient() {
+        let canvas = document.createElement("canvas");
+        canvas.width = 256;
+        canvas.height = 256;
+        let ctx = canvas.getContext("2d");
+        let gradient = ctx.createLinearGradient(0, 0, 0, 256);
+        gradient.addColorStop(0, "#87CEEB");
+        gradient.addColorStop(1, "#ffffff");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 256, 256);
+        return canvas;
+      }
+
+      function generateObstacle() {
+        let obstacle = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 1, 1),
+          new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        );
+        let lane =
+          (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 2);
+        obstacle.position.set(lane, 0.5, -10);
+        scene.add(obstacle);
+        obstacles.push(obstacle);
+      }
+
+      function onKeyDown(event) {
+        if (event.key === "ArrowLeft") moveLeft = true;
+        if (event.key === "ArrowRight") moveRight = true;
+        if (event.key === " " && !isJumping) {
+          isJumping = true;
+          velocityY = 0.2;
+        }
+      }
+
+      function onKeyUp(event) {
+        if (event.key === "ArrowLeft") moveLeft = false;
+        if (event.key === "ArrowRight") moveRight = false;
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (moveLeft && player.position.x > -1) player.position.x -= 0.1;
+        if (moveRight && player.position.x < 1) player.position.x += 0.1;
+
+        if (isJumping) {
+          player.position.y += velocityY;
+          velocityY -= 0.01;
+          if (player.position.y <= 0.5) {
+            player.position.y = 0.5;
+            isJumping = false;
+          }
+        }
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+          obstacles[i].position.z += speed;
+          if (obstacles[i].position.z > 5) {
+            scene.remove(obstacles[i]);
+            obstacles.splice(i, 1);
+          }
+          if (checkCollision(player, obstacles[i])) {
+            alert("Game Over!");
+            window.location.reload();
+          }
+        }
+        renderer.render(scene, camera);
+      }
+
+      function checkCollision(a, b) {
+        return (
+          Math.abs(a.position.x - b.position.x) < 1 &&
+          Math.abs(a.position.y - b.position.y) < 1 &&
+          Math.abs(a.position.z - b.position.z) < 1
+        );
+      }
+
+      window.addEventListener("resize", () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      });
+
+      init();
+    </script>
+  </body>
+</html>

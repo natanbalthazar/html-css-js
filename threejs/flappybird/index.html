@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappy Bird 3D</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: skyblue;
+      }
+      #score {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="score">Score: 0</div>
+    <script>
+      let scene,
+        camera,
+        renderer,
+        bird,
+        pipes = [],
+        score = 0;
+      let velocity = 0,
+        gravity = -0.002,
+        isPlaying = false;
+
+      function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let light = new THREE.AmbientLight(0xffffff, 1);
+        scene.add(light);
+
+        let birdGeometry = new THREE.ConeGeometry(0.5, 1, 16);
+        let birdMaterial = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
+        bird = new THREE.Mesh(birdGeometry, birdMaterial);
+        bird.rotation.z = Math.PI / 2;
+        bird.position.set(0, 1, 0);
+        scene.add(bird);
+
+        let groundGeometry = new THREE.PlaneGeometry(20, 10);
+        let groundMaterial = new THREE.MeshBasicMaterial({
+          color: 0x228b22,
+          side: THREE.DoubleSide,
+        });
+        let ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -5;
+        scene.add(ground);
+
+        camera.position.z = 5;
+
+        setInterval(spawnPipe, 2000);
+        animate();
+      }
+
+      function spawnPipe() {
+        let gap = 7;
+        let yPosition = (Math.random() - 0.5) * 6;
+
+        let pipeGeometry = new THREE.BoxGeometry(1, 10, 1);
+        let pipeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+        let topPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
+        topPipe.position.set(5, yPosition + gap, 0);
+
+        let bottomPipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
+        bottomPipe.position.set(5, yPosition - gap, 0);
+
+        pipes.push({ top: topPipe, bottom: bottomPipe });
+        scene.add(topPipe);
+        scene.add(bottomPipe);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (isPlaying) {
+          velocity += gravity;
+          bird.position.y += velocity;
+
+          for (let pipe of pipes) {
+            pipe.top.position.x -= 0.05;
+            pipe.bottom.position.x -= 0.05;
+
+            if (pipe.top.position.x < -5) {
+              scene.remove(pipe.top);
+              scene.remove(pipe.bottom);
+              pipes.shift();
+              score++;
+              document.getElementById("score").innerText = "Score: " + score;
+            }
+
+            if (checkCollision(pipe.top) || checkCollision(pipe.bottom)) {
+              resetGame();
+            }
+          }
+
+          if (bird.position.y < -5 || bird.position.y > 5) {
+            resetGame();
+          }
+        }
+
+        renderer.render(scene, camera);
+      }
+
+      function checkCollision(pipe) {
+        let birdBox = new THREE.Box3().setFromObject(bird);
+        let pipeBox = new THREE.Box3().setFromObject(pipe);
+        return birdBox.intersectsBox(pipeBox);
+      }
+
+      function resetGame() {
+        isPlaying = false;
+        bird.position.set(0, 1, 0);
+        velocity = 0;
+        pipes.forEach((pipe) => {
+          scene.remove(pipe.top);
+          scene.remove(pipe.bottom);
+        });
+        pipes = [];
+        score = 0;
+        document.getElementById("score").innerText = "Score: 0";
+      }
+
+      function flap() {
+        if (!isPlaying) isPlaying = true;
+        velocity = 0.05;
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") flap();
+      });
+      window.addEventListener("click", flap);
+
+      init();
+    </script>
+  </body>
+</html>

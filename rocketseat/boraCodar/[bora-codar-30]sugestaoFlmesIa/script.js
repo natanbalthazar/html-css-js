@@ -358,6 +358,7 @@ async function getMovies() {
     method: 'GET',
     headers: {
       accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5Y2NlMWI3ZjMzMWQyYzYwNzhkMDk2ODYyN2FiYzQxOCIsIm5iZiI6MTc0MzI2MTIzMy4wMTUsInN1YiI6IjY3ZTgwZTMxYTNkOGNjOTI4ZTY3Y2FmYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7TbKKfYRfAMrCfWhVIOVsn9CxHaZ1DIWm_sP9vlJaPY'
     }
   };
 
@@ -381,6 +382,7 @@ async function getMoreInformation(id) {
     method: 'GET',
     headers: {
       accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5Y2NlMWI3ZjMzMWQyYzYwNzhkMDk2ODYyN2FiYzQxOCIsIm5iZiI6MTc0MzI2MTIzMy4wMTUsInN1YiI6IjY3ZTgwZTMxYTNkOGNjOTI4ZTY3Y2FmYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7TbKKfYRfAMrCfWhVIOVsn9CxHaZ1DIWm_sP9vlJaPY'
     }
   };
   try {
@@ -406,6 +408,7 @@ async function watch(e) {
     method: 'GET',
     headers: {
       accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5Y2NlMWI3ZjMzMWQyYzYwNzhkMDk2ODYyN2FiYzQxOCIsIm5iZiI6MTc0MzI2MTIzMy4wMTUsInN1YiI6IjY3ZTgwZTMxYTNkOGNjOTI4ZTY3Y2FmYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7TbKKfYRfAMrCfWhVIOVsn9CxHaZ1DIWm_sP9vlJaPY'
     }
   };
   try {

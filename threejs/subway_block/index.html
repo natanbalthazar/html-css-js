@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Subway Surfers</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      #scoreboard {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 20px;
+        font-family: Arial, sans-serif;
+        color: white;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="scoreboard">Score: 0 | Level: 1</div>
+    <script>
+      // Configuração da cena
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Criar jogador
+      const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const player = new THREE.Mesh(playerGeometry, playerMaterial);
+      scene.add(player);
+
+      let lane = 0;
+      const lanes = [-2, 0, 2]; // Pistas disponíveis
+      let score = 0;
+      let level = 1;
+      let speed = 0.2;
+
+      // Criar obstáculos
+      const obstacles = [];
+      const obstacleGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+      function createObstacle() {
+        const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+        obstacle.position.set(lanes[Math.floor(Math.random() * 3)], 0, -20);
+        scene.add(obstacle);
+        obstacles.push(obstacle);
+      }
+
+      // Controles do jogador
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft" && lane > 0) lane--;
+        if (event.key === "ArrowRight" && lane < 2) lane++;
+        player.position.x = lanes[lane];
+      });
+
+      // Função de checagem de colisão
+      function checkCollision(player, obstacle) {
+        const distance = player.position.distanceTo(obstacle.position);
+        return distance < 1.1;
+      }
+
+      function updateScore() {
+        score += 10;
+        if (score % 100 === 0) {
+          level++;
+          speed += 0.05;
+        }
+        document.getElementById(
+          "scoreboard"
+        ).innerText = `Score: ${score} | Level: ${level}`;
+      }
+
+      // Posição inicial da câmera
+      camera.position.z = 5;
+      camera.position.y = 2;
+      camera.lookAt(player.position);
+
+      // Loop de animação
+      function animate() {
+        requestAnimationFrame(animate);
+
+        obstacles.forEach((obstacle, index) => {
+          obstacle.position.z += speed;
+
+          if (checkCollision(player, obstacle)) {
+            alert("Game Over! Score: " + score);
+            window.location.reload();
+          }
+
+          if (obstacle.position.z > 5) {
+            scene.remove(obstacle);
+            obstacles.splice(index, 1);
+            updateScore();
+          }
+        });
+
+        if (Math.random() < 0.02) {
+          createObstacle();
+        }
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </body>
+</html>

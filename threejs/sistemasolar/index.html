@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema Solar em Three.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  </head>
+  <body>
+    <script>
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Controles de câmera
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.rotateSpeed = 0.5;
+      controls.enableZoom = true;
+
+      // Efeito Bloom
+      const composer = new THREE.EffectComposer(renderer);
+      const renderPass = new THREE.RenderPass(scene, camera);
+      composer.addPass(renderPass);
+
+      const bloomPass = new THREE.UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        1.5,
+        0.4,
+        0.85
+      );
+      composer.addPass(bloomPass);
+
+      // Criar o Sol
+      const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
+      const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+      scene.add(sun);
+
+      // Criar planetas e órbitas
+      const planets = [
+        { size: 1, color: 0x0000ff, distance: 10, speed: 0.02 }, // Terra
+        { size: 0.5, color: 0xff0000, distance: 15, speed: 0.015 }, // Marte
+        { size: 1.2, color: 0xffa500, distance: 7, speed: 0.025 }, // Vênus
+        { size: 1.5, color: 0xaaaaaa, distance: 20, speed: 0.01 }, // Júpiter
+      ];
+
+      const planetMeshes = [];
+
+      planets.forEach((planet) => {
+        const geometry = new THREE.SphereGeometry(planet.size, 32, 32);
+        const material = new THREE.MeshStandardMaterial({
+          color: planet.color,
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+        planetMeshes.push({
+          mesh,
+          distance: planet.distance,
+          speed: planet.speed,
+        });
+      });
+
+      // Criar órbitas (elipses)
+      const orbitMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+
+      planetMeshes.forEach((planet) => {
+        const orbitPoints = [];
+        for (let i = 0; i <= 100; i++) {
+          const angle = (i / 100) * Math.PI * 2;
+          const x = Math.cos(angle) * planet.distance;
+          const z = Math.sin(angle) * planet.distance;
+          orbitPoints.push(new THREE.Vector3(x, 0, z));
+        }
+
+        const orbitGeometry = new THREE.BufferGeometry().setFromPoints(
+          orbitPoints
+        );
+        const orbitLine = new THREE.LineLoop(orbitGeometry, orbitMaterial);
+        scene.add(orbitLine);
+      });
+
+      // Criar estrelas com efeito de brilho
+      const stars = [];
+      const starGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+      const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      for (let i = 0; i < 200; i++) {
+        const star = new THREE.Mesh(starGeometry, starMaterial);
+        star.position.set(
+          (Math.random() - 0.5) * 300,
+          (Math.random() - 0.5) * 300,
+          (Math.random() - 0.5) * 300
+        );
+        scene.add(star);
+        stars.push(star);
+      }
+
+      // Luz
+      const light = new THREE.PointLight(0xffffff, 2, 100);
+      light.position.set(0, 0, 0);
+      scene.add(light);
+
+      camera.position.z = 40;
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        const time = Date.now() * 0.0005;
+        planetMeshes.forEach((planet, index) => {
+          planet.mesh.position.x =
+            Math.cos(time * planets[index].speed) * planet.distance;
+          planet.mesh.position.z =
+            Math.sin(time * planets[index].speed) * planet.distance;
+        });
+
+        controls.update();
+        composer.render();
+      }
+      animate();
+    </script>
+  </body>
+</html>
